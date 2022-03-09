@@ -1,7 +1,6 @@
 package com.lelin.weatherapp.network
 
 import com.lelin.weatherapp.model.Weather
-import com.lelin.weatherapp.model.WeatherObject
 import com.lelin.weatherapp.utils.Constants
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -9,9 +8,11 @@ import javax.inject.Singleton
 
 @Singleton
 interface WeatherApi {
-    @GET(value = "data/2.5/weather")
+    @GET(value = "data/2.5/onecall")
     suspend fun getWeather(
-        @Query("q") query: String,
+        @Query("exclude") query: String ="hourly,minutely",
+        @Query("lat") lat: String ="33.44",
+        @Query("lon") lon: String = "-94.04",
         @Query("units") units: String = "imperial",
         @Query("appid") appid: String = Constants.API_KEY,
 

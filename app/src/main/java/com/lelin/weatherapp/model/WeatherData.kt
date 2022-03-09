@@ -1,7 +1,8 @@
 package com.lelin.weatherapp.model
 
-data class WeatherObject(
+data class WeatherData(
     val description: String,
     val icon: String,
     val id: Int,
-    val main: String)
+    val main: String
+)
