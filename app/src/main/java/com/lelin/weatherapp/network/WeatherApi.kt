@@ -11,8 +11,8 @@ interface WeatherApi {
     @GET(value = "data/2.5/onecall")
     suspend fun getWeather(
         @Query("exclude") query: String ="hourly,minutely",
-        @Query("lat") lat: String ="33.44",
-        @Query("lon") lon: String = "-94.04",
+        @Query("lat") lat: String ="23.44",
+        @Query("lon") lon: String = "90.04",
         @Query("units") units: String = "imperial",
         @Query("appid") appid: String = Constants.API_KEY,
 
