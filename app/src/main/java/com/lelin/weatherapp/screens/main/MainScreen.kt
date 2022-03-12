@@ -30,11 +30,12 @@ import com.lelin.weatherapp.data.DataOrException
 import com.lelin.weatherapp.model.Current
 import com.lelin.weatherapp.model.Daily
 import com.lelin.weatherapp.model.Weather
+import com.lelin.weatherapp.navigation.WeatherScreens
 import com.lelin.weatherapp.utils.formatDate
 import com.lelin.weatherapp.utils.formatTime
 import com.lelin.weatherapp.utils.formatToDecimal
 import com.lelin.weatherapp.utils.getFormatDate
-import com.lelin.weatherapp.widgets.WeatherAppBar
+import com.lelin.weatherapp.widgets.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -67,6 +68,9 @@ fun MainScaffold(weather: Weather,navController: NavController){
         WeatherAppBar(
             title = weather.timezone,
             navController = navController,
+            onAddActionClick = {
+                  navController.navigate(WeatherScreens.SearchScreen.name)
+            },
             elevation = 5.dp ){
             Log.e("TAG", "MainScaffold: onButton clicke" )
         }
@@ -139,67 +143,6 @@ fun MainContent(weather: Weather) {
     
 }
 
-@Composable
-fun WeatherStateImage(url: String){
-    Image(painter = rememberImagePainter(url), contentDescription = "image", modifier = Modifier.size(80.dp) )
-}
-
-@Composable
-fun HumidityWindPressureRow(current: Current){
-    Row(
-        modifier = Modifier
-            .padding(12.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row(modifier = Modifier.padding(4.dp)) {
-            Icon(painter = painterResource(id = R.drawable.humidity), contentDescription = "humidity",
-            modifier = Modifier.size(20.dp))
-            Text(text = "${current.humidity}", style = MaterialTheme.typography.caption)
-        }
-
-        Row(modifier = Modifier.padding(4.dp)) {
-            Icon(painter = painterResource(id = R.drawable.pressure), contentDescription = "humidity",
-                modifier = Modifier.size(20.dp))
-            Text(text = "${current.pressure} psi", style = MaterialTheme.typography.caption)
-        }
-
-        Row(modifier = Modifier.padding(4.dp)) {
-            Icon(painter = painterResource(id = R.drawable.wind), contentDescription = "humidity",
-                modifier = Modifier.size(20.dp))
-            Text(text = "${current.humidity} mph", style = MaterialTheme.typography.caption)
-        }
-
-
-    }
-}
-
-@Composable
-fun SunSetRow(current: Current){
-    Row(
-        modifier = Modifier
-            .padding(top = 15.dp, bottom = 6.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row(modifier = Modifier.padding(4.dp)) {
-            Icon(painter = painterResource(id = R.drawable.sunrise), contentDescription = "sunrise",
-                modifier = Modifier.size(30.dp))
-            Text(text = formatTime(current.sunrise), style = MaterialTheme.typography.caption)
-        }
-
-        Row(modifier = Modifier.padding(4.dp)) {
-            Icon(painter = painterResource(id = R.drawable.sunset), contentDescription = "sunset",
-                modifier = Modifier.size(30.dp))
-            Text(text = formatTime(current.sunset), style = MaterialTheme.typography.caption)
-        }
-
-        
-
-    }
-}
 
 @Composable
 fun WeatherWeekView(daily: MutableList<Daily>){
@@ -209,10 +152,10 @@ fun WeatherWeekView(daily: MutableList<Daily>){
             .padding(top = 2.dp)
             .fillMaxHeight()
             .fillMaxWidth(),
-        color = Color(0xFFEDEEEF),
-        shape = RoundedCornerShape(corner = CornerSize(5.dp))
+        color = Color(0xFFEEF1EF),
+        shape = RoundedCornerShape(size =14.dp)
     ) {
-        LazyColumn(contentPadding = PaddingValues(5.dp)){
+        LazyColumn(contentPadding = PaddingValues(1.dp), modifier = Modifier.padding(2.dp)){
             itemsIndexed(items = daily){ index, item ->
                 WeatherCard(item)
             }
@@ -221,42 +164,4 @@ fun WeatherWeekView(daily: MutableList<Daily>){
     
 }
 
-@Composable
-fun WeatherCard(daily: Daily){
 
-    val imageUrl = "https://openweathermap.org/img/wn/${daily.weather.firstOrNull()?.icon}.png"
-
-
-    Card(
-        modifier = Modifier
-            .padding(bottom = 5.dp)
-            .fillMaxWidth()
-            .height(60.dp),
-        backgroundColor = Color.White,
-        shape = RoundedCornerShape(bottomStartPercent = 50, bottomEndPercent = 50, topStartPercent = 50)
-    ) {
-        
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(5.dp)
-        ) {
-
-            Text(text = getFormatDate(daily.dt), style = MaterialTheme.typography.subtitle1, modifier = Modifier.padding(horizontal = 15.dp))
-            WeatherStateImage(imageUrl)
-            Text(text = daily.weather.firstOrNull()!!.main, style = MaterialTheme.typography.subtitle2)
-            Text(text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = Color.Blue, fontWeight = FontWeight.Bold)){
-                    append(formatToDecimal(daily.temp.day)+"℉  ")
-                    withStyle(style = SpanStyle(color = Color.Gray, fontWeight = FontWeight.Bold)){
-                        append(formatToDecimal(daily.temp.night)+"℉")
-                    }
-                }
-            }, modifier = Modifier.padding(end = 15.dp))
-
-
-
-        }
-
-    }
-}
