@@ -23,6 +23,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.Placeholder
 import androidx.navigation.NavController
+import com.lelin.weatherapp.navigation.WeatherScreens
 import com.lelin.weatherapp.widgets.WeatherAppBar
 
 private const val TAG = "SearchScreen"
@@ -44,12 +45,13 @@ fun SearchScreen(navController: NavController){
             .fillMaxHeight()) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Top
             ) {
                 SearchBar(modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
-                    .align(Alignment.CenterHorizontally)){
+                    .align(Alignment.CenterHorizontally)){ city ->
+                    navController.navigate(WeatherScreens.MainScreen.name+"/$city")
                     Log.e(TAG, "SearchScreen: typing....:$it")
                 }
             }

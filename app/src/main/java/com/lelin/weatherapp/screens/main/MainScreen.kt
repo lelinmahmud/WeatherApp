@@ -40,8 +40,12 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+private const val TAG = "MainScreen"
+
 @Composable
-fun MainScreen(navController: NavController,viewModel: MainViewModel){
+fun MainScreen(navController: NavController, viewModel: MainViewModel, city: String?){
+
+    Log.e(TAG, "MainScreen: city is :$city")
 
     val weatherData = produceState<DataOrException<Weather,Boolean,Exception>>(
         initialValue = DataOrException(loading = true)){
@@ -72,7 +76,7 @@ fun MainScaffold(weather: Weather,navController: NavController){
                   navController.navigate(WeatherScreens.SearchScreen.name)
             },
             elevation = 5.dp ){
-            Log.e("TAG", "MainScaffold: onButton clicke" )
+            Log.e("TAG", "MainScaffold: onButton clicked" )
         }
     }) {
         MainContent(weather)
